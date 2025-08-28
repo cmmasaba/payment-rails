@@ -41,7 +41,7 @@ type Service interface {
 	ValidateAccountHolderStatus(ctx context.Context, accHolderId, accHolderIdType string) (bool, error)
 }
 
-func NewRemittance(
+func New(
 	subKey, apiKey, apiSecret, env string, backend common.Backend, cache common.CacheStore,
 ) Service {
 	return &Remittance{

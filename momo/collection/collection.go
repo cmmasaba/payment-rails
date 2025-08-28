@@ -50,7 +50,7 @@ type Service interface {
 	GetBasicUserInfo(ctx context.Context, accHolderIDType, accHolderID string) (*types.BasicUserInfo, error)
 }
 
-func NewCollection(
+func New(
 	subKey, apiKey, apiSecret, env string, backend common.Backend, cache common.CacheStore,
 ) Service {
 	return &Collection{

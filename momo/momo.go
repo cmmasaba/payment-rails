@@ -1,6 +1,7 @@
 package momo
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/nutcas3/payment-rails/momo/collection"
@@ -37,6 +38,14 @@ type Client struct {
 
 // New creates a new Momo client with the given configuration
 func New(cfg ClientConfig) (*Client, error) {
+	if cfg.APIKey == "" || cfg.APISecret == "" {
+		return nil, fmt.Errorf("APIKey and APISecret are required")
+	}
+
+	if cfg.Environment == "" {
+		cfg.Environment = "sandbox"
+	}
+
 	backendCfg := &common.BackendConfig{
 		Environment: cfg.Environment,
 		HTTPClient:  cfg.HTTPClient,
@@ -56,7 +65,7 @@ func New(cfg ClientConfig) (*Client, error) {
 
 	// Initialize Collection service if subscription key is provided
 	if cfg.CollectionSubscriptionKey != "" {
-		client.Collection = collection.NewCollection(
+		client.Collection = collection.New(
 			cfg.CollectionSubscriptionKey,
 			cfg.APIKey,
 			cfg.APISecret,
@@ -68,7 +77,7 @@ func New(cfg ClientConfig) (*Client, error) {
 
 	// Initialize Disbursement service if subscription key is provided
 	if cfg.DisbursementSubscriptionKey != "" {
-		client.Disbursement = disbursement.NewDisbursement(
+		client.Disbursement = disbursement.New(
 			cfg.DisbursementSubscriptionKey,
 			cfg.APIKey,
 			cfg.APISecret,
@@ -80,7 +89,7 @@ func New(cfg ClientConfig) (*Client, error) {
 
 	// Initialize Remittance service if subscription key is provided
 	if cfg.RemittanceSubscriptionKey != "" {
-		client.Remittance = remittance.NewRemittance(
+		client.Remittance = remittance.New(
 			cfg.RemittanceSubscriptionKey,
 			cfg.APIKey,
 			cfg.APISecret,
